@@ -7,7 +7,7 @@ USE laboration1;
 DROP TABLE IF EXISTS account;
 DROP TABLE IF EXISTS moon_mission
 ;
-CREATE TABLE account (user_id smallint PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255),password VARCHAR(255),first_name VARCHAR(255),last_name VARCHAR(255),ssn VARCHAR(255));
+CREATE TABLE account (user_id smallint PRIMARY KEY AUTO_INCREMENT,name VARCHAR(255),password VARCHAR(255),fFirst_name VARCHAR(255),last_name VARCHAR(255),ssn VARCHAR(255));
 CREATE TABLE moon_mission
 (mission_id smallint PRIMARY KEY AUTO_INCREMENT,spacecraft VARCHAR(255),launch_date DATE,carrier_rocket VARCHAR(255),operator VARCHAR(255),mission_type VARCHAR(255),outcome VARCHAR(255));
 --
