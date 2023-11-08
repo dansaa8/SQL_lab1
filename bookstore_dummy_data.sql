@@ -17,7 +17,7 @@ VALUES
     ('Erik', 'Andersson', '1990-08-14')
 ;
 
-INSERT INTO book(isbn, title, price, publication_date, language_id, author_id)
+INSERT INTO book(isbn, title, price, publication_date, fk_language_id, fk_author_id)
 VALUES
     ('9780321965516', 'English Book', 45, '2001-06-07', 1, 1),
     ('9781394219247', 'English book2', 53, '2005-03-23', 1, 1),
@@ -34,7 +34,7 @@ VALUES
     ('Umeå stadsbibliotek', 'Umeå')
 ;
 
-INSERT INTO inventory(store_id, book_isbn, amount)
+INSERT INTO inventory(fk_store_id, fk_book_isbn, amount)
 VALUES
     (1, '9780321965516', 3),
     (1, '9789144134932', 6),
@@ -51,26 +51,21 @@ VALUES
     (3, '9781847927484', 1)
 ;
 
-
-# CREATE VIEW total_author_book_value AS
-# SELECT
-# CONCAT(first_name, ' ', last_name) AS Name,
-# TIMESTAMPDIFF(YEAR, birth_date, CURDATE()) AS 'Age'
-# FROM author;
-
 DROP VIEW IF EXISTS total_author_book_value;
 CREATE VIEW total_author_book_value AS
 SELECT
     CONCAT(author.first_name, ' ', author.last_name) AS name,
-    YEAR(CURDATE()) - YEAR(author.birth_date) AS age,
+    CONCAT(YEAR(CURDATE()) - YEAR(author.birth_date), ' år') AS age,
     IFNULL(
-        (SELECT COUNT(DISTINCT title) FROM book WHERE book.author_id = author.id), 0
+        (SELECT COUNT(DISTINCT title)
+         FROM book
+         WHERE book.fk_author_id = author.id), 0
     ) AS book_title_count,
     IFNULL(
         (SELECT SUM(book.price * inventory.amount)
         FROM book
-        JOIN inventory ON book.isbn = inventory.book_isbn
-        WHERE book.author_id = author.id), 0
+        JOIN inventory ON book.isbn = inventory.fk_book_isbn
+        WHERE book.fk_author_id = author.id), 0
     ) AS inventory_value
 FROM author;
 

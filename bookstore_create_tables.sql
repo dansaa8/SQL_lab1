@@ -25,19 +25,19 @@ CREATE TABLE book (
     title VARCHAR(255),
     price INT,
     publication_date DATE,
-    language_id INT,
-    author_id INT,
-    CONSTRAINT FK_Book_Language FOREIGN KEY (language_id) REFERENCES language(id),
-    CONSTRAINT FK_Book_Author FOREIGN KEY (author_id) REFERENCES author(id)
+    fk_language_id INT,
+    fk_author_id INT,
+    CONSTRAINT FK_Book_Language FOREIGN KEY (fk_language_id) REFERENCES language(id),
+    CONSTRAINT FK_Book_Author FOREIGN KEY (fk_author_id) REFERENCES author(id)
 );
 
 CREATE TABLE inventory (
-    store_id INT,
-    book_isbn VARCHAR(255),
+    fk_store_id INT,
+    fk_book_isbn VARCHAR(255),
     amount INT,
-    CONSTRAINT FK_BookStore_Id FOREIGN KEY (store_id) REFERENCES bookstore(id),
-    CONSTRAINT FK_Book_Isbn FOREIGN KEY (book_isbn) REFERENCES book(isbn),
-    PRIMARY KEY(store_id, book_isbn)
+    CONSTRAINT FK_BookStore_Id FOREIGN KEY (fk_store_id) REFERENCES bookstore(id),
+    CONSTRAINT FK_Book_Isbn FOREIGN KEY (fk_book_isbn) REFERENCES book(isbn),
+    PRIMARY KEY(fk_store_id, fk_book_isbn)
 );
 
 
@@ -94,16 +94,6 @@ BEGIN
   END IF;
 END;
 //
-
-
-CREATE TRIGGER check_value BEFORE INSERT ON book
-FOR EACH ROW
-BEGIN
-    IF NOT check_isbn(NEW.isbn) THEN
-        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'invalid value for isbn_column';
-    END IF;
-END //
-
 
 DROP TRIGGER if exists check_value;
 -- Applicera funktionen ovan via TRIGGER
